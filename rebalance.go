@@ -15,13 +15,14 @@ type rebalanceAttempt struct {
 	// identifier for the intercepted htlc
 	circuitKey *routerrpc.CircuitKey
 
-	id          string
-	amount      uint64
-	publicKey   []byte
-	mints       []string
-	ecashAmount uint64
-	invoice     string
-	ecashHTLC   string
+	id                 string
+	amount             uint64
+	publicKey          []byte
+	mints              []string
+	ecashAmount        uint64
+	invoice            string
+	ecashHTLC          string
+	rebalanceSucceeded bool
 }
 
 func NewPendingRebalanceAttempts() *PendingRebalanceAttempts {

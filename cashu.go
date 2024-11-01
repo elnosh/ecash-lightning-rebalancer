@@ -25,11 +25,11 @@ func VerifyEcashHTLC(proofs cashu.Proofs, bolt11 decodepay.Bolt11, pubkey *secp2
 	for _, proof := range proofs {
 		secret, err := nut10.DeserializeSecret(proof.Secret)
 		if err != nil {
-			return fmt.Errorf("cashu token in swap message has invalid secret: %v", err)
+			return fmt.Errorf("proof has invalid secret: %v", err)
 		}
 
 		if secret.Kind != nut10.HTLC {
-			return errors.New("cashu token in swap message is not of kind HTLC")
+			return errors.New("proof secret is not of kind HTLC")
 		}
 
 		// verify invoice and ecash are locked to same hash
@@ -39,7 +39,7 @@ func VerifyEcashHTLC(proofs cashu.Proofs, bolt11 decodepay.Bolt11, pubkey *secp2
 
 		tags, err := nut11.ParseP2PKTags(secret.Data.Tags)
 		if err != nil {
-			return fmt.Errorf("cashu token in swap message has invalid tags: %v", err)
+			return fmt.Errorf("proof secret has invalid tags: %v", err)
 		}
 
 		if tags.NSigs != 1 {
@@ -56,7 +56,7 @@ func VerifyEcashHTLC(proofs cashu.Proofs, bolt11 decodepay.Bolt11, pubkey *secp2
 			tags.Pubkeys[0].SerializeCompressed(),
 			pubkey.SerializeCompressed(),
 		) {
-			return errors.New("ecash in swap message is not locked to correct pubkey")
+			return errors.New("proof is not locked to correct pubkey")
 		}
 	}
 
