@@ -95,7 +95,6 @@ type RebalanceRequest struct {
 	Id string
 	// amount to rebalance in channel
 	Amount uint64
-	// locktime
 }
 
 func (req RebalanceRequest) CustomMessage(peer string) (lnrpc.SendCustomMessageRequest, error) {

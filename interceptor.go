@@ -75,7 +75,6 @@ func runInterceptor(
 			// listen to rebalance chan and resume HTLC
 			go func() {
 				rebalance := <-rebalanceChan
-				// resume previously held HTLC
 				htlcInterceptResponse := routerrpc.ForwardHtlcInterceptResponse{
 					IncomingCircuitKey: rebalance.circuitKey,
 					Action:             routerrpc.ResolveHoldForwardAction_RESUME,
