@@ -42,6 +42,10 @@ func VerifyEcashHTLC(proofs cashu.Proofs, bolt11 decodepay.Bolt11, pubkey *secp2
 			return fmt.Errorf("proof secret has invalid tags: %v", err)
 		}
 
+		if (int64(bolt11.Expiry) + 30) > tags.Locktime {
+			return errors.New("invalid locktime")
+		}
+
 		if tags.NSigs != 1 {
 			return errors.New("n_sigs tag in ecash is not 1")
 		}

@@ -5,8 +5,10 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log/slog"
+	"slices"
 	"time"
 
 	"github.com/btcsuite/btcd/btcec/v2"
@@ -337,8 +339,12 @@ func processHTLCSwap(
 		return fmt.Errorf("invalid cashu token in swap message: %v", err)
 	}
 
-	// TODO: check ecash comes from one of specified trusted mints
-	// TODO: verify locktime
+	tokenMint := token.Mint()
+	trustedMints := cashuWallet.TrustedMints()
+	if !slices.Contains(trustedMints, tokenMint) {
+		return errors.New("ecash is not from list of trusted mints")
+	}
+
 	proofs := token.Proofs()
 	if err = VerifyEcashHTLC(proofs, bolt11, cashuWallet.GetReceivePubkey(), rebalance.ecashAmount); err != nil {
 		return fmt.Errorf("could not verify ecash HTLC: %v", err)
