@@ -7,9 +7,9 @@ toolchain go1.22.4
 require (
 	github.com/btcsuite/btcd/btcec/v2 v2.3.3
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.3.0
-	github.com/elnosh/gonuts v0.3.0
+	github.com/elnosh/gonuts v0.3.1-0.20241108174139-10e56bd0f507
 	github.com/joho/godotenv v1.5.1
-	github.com/lightningnetwork/lnd v0.17.5-beta
+	github.com/lightningnetwork/lnd v0.18.2-beta
 	github.com/nbd-wtf/ln-decodepay v1.12.1
 	google.golang.org/grpc v1.67.1
 	gopkg.in/macaroon.v2 v2.1.0
@@ -28,7 +28,7 @@ require (
 	github.com/btcsuite/btcd/btcutil/psbt v1.1.9 // indirect
 	github.com/btcsuite/btcd/chaincfg/chainhash v1.1.0 // indirect
 	github.com/btcsuite/btclog v0.0.0-20241003133417-09c4e92e319c // indirect
-	github.com/btcsuite/btcwallet v0.16.10-0.20240127010340-16b422a2e8bf // indirect
+	github.com/btcsuite/btcwallet v0.16.10-0.20240706055350-e391a1c31df2 // indirect
 	github.com/btcsuite/btcwallet/wallet/txauthor v1.3.4 // indirect
 	github.com/btcsuite/btcwallet/wallet/txrules v1.2.1 // indirect
 	github.com/btcsuite/btcwallet/wallet/txsizes v1.2.4 // indirect
@@ -58,7 +58,7 @@ require (
 	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
 	github.com/gofrs/uuid v4.2.0+incompatible // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
+	github.com/golang-jwt/jwt/v4 v4.5.1 // indirect
 	github.com/golang-migrate/migrate/v4 v4.18.1 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
@@ -104,6 +104,7 @@ require (
 	github.com/lightningnetwork/lnd/healthcheck v1.2.5 // indirect
 	github.com/lightningnetwork/lnd/kvdb v1.4.10 // indirect
 	github.com/lightningnetwork/lnd/queue v1.1.1 // indirect
+	github.com/lightningnetwork/lnd/sqldb v1.0.2 // indirect
 	github.com/lightningnetwork/lnd/ticker v1.1.1 // indirect
 	github.com/lightningnetwork/lnd/tlv v1.2.6 // indirect
 	github.com/lightningnetwork/lnd/tor v1.1.3 // indirect
@@ -112,7 +113,6 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/miekg/dns v1.1.62 // indirect
 	github.com/moby/docker-image-spec v1.3.1 // indirect
-	github.com/moby/sys/userns v0.1.0 // indirect
 	github.com/moby/term v0.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect

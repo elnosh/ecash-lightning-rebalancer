@@ -192,6 +192,45 @@ func processRebalanceResponse(
 
 	// TODO: check willing to accept rebalanceResponse.EcashAmount
 
+	// if don't have any proofs from specified trusted mints by peer, do swap first
+	balanceByMints := cashuWallet.GetBalanceByMints()
+	peerMints := response.Mints
+	var targetMint string
+	var amountToSwap uint64
+	needSwap := true
+	for _, m := range peerMints {
+		targetMint = m
+		if balanceByMints[m] > response.EcashAmount {
+			needSwap = false
+			break
+		}
+		amountToSwap = response.EcashAmount - balanceByMints[m]
+	}
+
+	if needSwap {
+		var fromMint string
+		hasBalanceForSwap := false
+		for mint, mintBalance := range balanceByMints {
+			if mintBalance > amountToSwap {
+				hasBalanceForSwap = true
+				fromMint = mint
+			}
+		}
+		if hasBalanceForSwap {
+			if _, ok := balanceByMints[targetMint]; !ok {
+				if _, err := cashuWallet.AddMint(targetMint); err != nil {
+					return err
+				}
+			}
+			_, err := cashuWallet.MintSwap(amountToSwap, fromMint, targetMint)
+			if err != nil {
+				return err
+			}
+		} else {
+			return fmt.Errorf("cashu wallet does not have enough funds for transaction")
+		}
+	}
+
 	publicKey, err := secp256k1.ParsePubKey(response.PublicKey)
 	if err != nil {
 		return fmt.Errorf("got invalid public key in REBALANCE_RESPONSE message: %v", err)
@@ -204,19 +243,17 @@ func processRebalanceResponse(
 	}
 	hexPreimage := hex.EncodeToString(preimage)
 
-	expiry := time.Now().Add(time.Minute * 1)
 	addInvoiceRequest := lnrpc.Invoice{
 		RPreimage: preimage,
 		Value:     int64(rebalance.amount),
-		Expiry:    expiry.Unix(),
+		Expiry:    60,
 	}
 	invoice, err := lndClient.grpcClient.AddInvoice(ctx, &addInvoiceRequest)
 	if err != nil {
 		return fmt.Errorf("could not create invoice for rebalance: %v", err)
 	}
 
-	// TODO: if don't have any proofs from specified trusted mints by peer do swap for trusted mint
-
+	expiry := time.Now().Add(time.Minute * 1)
 	tags := nut11.P2PKTags{
 		NSigs:    1,
 		Pubkeys:  []*btcec.PublicKey{publicKey},
@@ -224,7 +261,7 @@ func processRebalanceResponse(
 	}
 	htlcLockedProofs, err := cashuWallet.HTLCLockedProofs(
 		response.EcashAmount,
-		cashuWallet.CurrentMint(),
+		targetMint,
 		hexPreimage,
 		&tags,
 		true,
